@@ -74,7 +74,7 @@ gmd(
                 );
             }
 
-            const { title, thumbnail,  download_url } = result;
+            const { title, thumbnail, download_url } = result;
 
             const audioBuffer = await gmdBuffer(download_url);
             const fileSize = audioBuffer.length;
@@ -170,11 +170,14 @@ gmd(
                 })
                 .join("\n");
 
+            // Fixed: Get thumbnail from the first track
+            const thumbnailUrl = tracks[0]?.thumbnail || tracks[0]?.image || tracks[0]?.album?.images?.[0]?.url || '';
+
             await sendButtons(Gifted, from, {
                 title: `${botName} SPOTIFY`,
                 text: `*Search Results:*\n\n${trackList}\n\n*Select a track:*`,
                 footer: botFooter,
-                image: { url: track.thumbnail },
+                image: { url: thumbnailUrl },
                 buttons: buttons,
             });
 
